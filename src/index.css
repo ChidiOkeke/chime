@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #FDFBF7;
+}
+
+/* Flash-in overlay (ivory/beige burst)
+.flash-in-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #FDFBF7;
+  animation: flashIn 2000ms ease-out forwards;
+}
+
+@keyframes flashIn {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    background: #FDFBF7;
+  }
+  45% {
+    opacity: 1;
+    background: #FDFBF7;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+    background: #FDFBF7;
+  }
+} */
+
+/* Flash-in overlay (ivory/beige bursting down to burgundy) */
+.flash-in-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #FDFBF7; /* Fallback/Starting color */
+  animation: flashIn 2000ms ease-out forwards;
+}
+
+@keyframes flashIn {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    background: #FDFBF7; /* Starts pure Ivory */
+  }
+  30% {
+    opacity: 1;
+    background: #631e27; /* Shifts smoothly into Beige */
+  }
+  65% {
+    opacity: 1;
+    background: #58111A; /* Deepens into your default Burgundy before vanishing */
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.02);
+    background: #58111A; /* Completely vanishes, matching your underlying page background */
+  }
+}
+
+
+/* Custom scrollbar to match aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FDFBF7;
+}
+::-webkit-scrollbar-thumb {
+  background: #58111A;
+  border-radius: 4px;
+}
