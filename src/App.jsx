@@ -334,7 +334,7 @@ export default function App() {
 
             {/* Wedding Details Summary */}
             <section className="py-20 px-4 max-w-4xl mx-auto text-burgundy-dark border-b border-beige">
-              <div className="space-y-6 w-5/6 md:w-1/2 mx-auto md:text-center">
+              <div className="space-y-6 w-5/6 md:w-4/5 mx-auto md:text-center">
                 <h2 className="text-3xl font-serif font-light text-burgundy">The Celebration</h2>
                 <p className="text-stone-600 leading-relaxed">
                   We look forward to sharing our joy with our nearest and dearest. Your presence at our wedding ceremony and reception is the greatest gift we could request.
