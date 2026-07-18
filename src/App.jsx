@@ -490,7 +490,7 @@ export default function App() {
                     <div className="pt-4">
                       <button
                         onClick={downloadAccessCard}
-                        className="inline-flex items-center space-x-2 px-8 py-4 bg-burgundy hover:bg-burgundy-light text-beige rounded font-semibold text-xs tracking-widest uppercase transition duration-300 shadow-md"
+                        className="btn-subtle-zoom inline-flex items-center space-x-2 px-8 py-4 bg-burgundy hover:bg-burgundy-light text-beige rounded font-semibold text-xs tracking-widest uppercase transition duration-300 shadow-md"
                       >
                         <Download className="w-4 h-4" />
                         <span>Download Access Card</span>

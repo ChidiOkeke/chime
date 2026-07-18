@@ -65,7 +65,32 @@ html, body, #root {
   }
 }
 
+@keyframes subtle-zoom {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  30% { 
+    /* Subtle 4% growth to catch the eye */
+    transform: scale(1.04); 
+  }
+}
 
+.btn-subtle-zoom {
+  /* Infinite, natural breathing loop using a smooth timing curve */
+  animation: subtle-zoom 3.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  transition: transform 0.2s ease;
+}
+
+/* Pause the automated pulse on hover so the user feels in control */
+.btn-subtle-zoom:hover {
+  animation-play-state: paused;
+  transform: scale(1.06); /* Slightly larger on intentional hover */
+}
+
+/* Crisp press effect when clicked */
+.btn-subtle-zoom:active {
+  transform: scale(0.97);
+}
 /* Custom scrollbar to match aesthetic */
 ::-webkit-scrollbar {
   width: 8px;
