@@ -314,16 +314,16 @@ export default function App() {
                     <Calendar className="w-6 h-6 text-emerald" />
                     <div>
                       <h4 className="font-semibold text-sm">WHEN</h4>
-                      <p className="text-stone-600 text-sm">October 10, 2026 at 2:00 PM Prompt</p>
+                      <p className="text-stone-600 text-sm">October 10, 2026 at 2:00 PM</p>
                     </div>
                   </div>
-                  {/* <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-4">
                     <MapPin className="w-6 h-6 text-emerald" />
                     <div>
                       <h4 className="font-semibold text-sm">WHERE</h4>
-                      <p className="text-stone-600 text-sm">The Grand Ivory Hall, Lagos</p>
+                      <p className="text-stone-600 text-sm">See invitation card for details</p>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </div>
 
@@ -332,7 +332,7 @@ export default function App() {
                 <div>
                   <h3 className="font-serif text-xl text-burgundy mb-2">Dress Code</h3>
                   <p className="text-sm text-stone-600 mb-6">
-                    We kindly invite our guests to match our celebration colors of Emerald Green, Burgundy, and Luxury Ivory.
+                    We kindly invite our guests to match our celebration colors of Emerald Green, Burgundy, Beige and Ivory.
                   </p>
                 </div>
                 <div className="grid grid-cols-4 gap-2 text-center text-[10px] uppercase tracking-wider font-semibold">
@@ -416,7 +416,7 @@ export default function App() {
                             required
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            placeholder="+234 (0) 801 234 5678"
+                            placeholder="0801 234 5678"
                             className="w-full pl-11 pr-4 py-3 border border-beige-dark bg-ivory rounded focus:outline-none focus:ring-1 focus:ring-emerald focus:border-emerald text-sm"
                           />
                         </div>
@@ -463,7 +463,7 @@ export default function App() {
                         className="inline-flex items-center space-x-2 px-8 py-4 bg-burgundy hover:bg-burgundy-light text-beige rounded font-semibold text-xs tracking-widest uppercase transition duration-300 shadow-md"
                       >
                         <Download className="w-4 h-4" />
-                        <span>Download Access Card PNG</span>
+                        <span>Download Access Card</span>
                       </button>
                       <p className="text-xs text-stone-400 mt-2">Please present this digital pass at the entrance gate.</p>
                     </div>
