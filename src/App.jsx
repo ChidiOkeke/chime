@@ -73,6 +73,36 @@ export default function App() {
     });
   }, [hasEntered]);
 
+  // When switching tabs: mute on hide, restore (toggle back) on show
+  const prevMuteRef = useRef(null);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      const a = audioRef.current;
+      if (!a) return;
+
+      if (document.visibilityState === 'hidden') {
+        // Remember what the user had set, then mute.
+        prevMuteRef.current = !a.muted;
+        a.muted = true;
+        setIsMuted(true);
+      } else if (document.visibilityState === 'visible') {
+        // Restore previous choice.
+        const wasUnmuted = prevMuteRef.current === true;
+        a.muted = !wasUnmuted;
+        setIsMuted(a.muted);
+
+        // Best-effort resume (may be blocked by browser)
+        if (wasUnmuted) {
+          a.play().catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
+
   // Flash overlay lifecycle
   useEffect(() => {
 
@@ -303,13 +333,13 @@ export default function App() {
             </div>
 
             {/* Wedding Details Summary */}
-            <section className="py-20 px-4 max-w-4xl mx-auto grid md:grid-cols-2 gap-12 text-burgundy-dark border-b border-beige">
-              <div className="space-y-6">
+            <section className="py-20 px-4 max-w-4xl mx-auto text-burgundy-dark border-b border-beige">
+              <div className="space-y-6 w-5/6 md:w-1/2 mx-auto md:text-center">
                 <h2 className="text-3xl font-serif font-light text-burgundy">The Celebration</h2>
                 <p className="text-stone-600 leading-relaxed">
                   We look forward to sharing our joy with our nearest and dearest. Your presence at our wedding ceremony and reception is the greatest gift we could request.
                 </p>
-                <div className="space-y-4 pt-2">
+                <div className="space-y-4 pt-2 text-left flex justify-center flex-col md:flex-row md:space-x-12 md:space-y-0">
                   <div className="flex items-center space-x-4">
                     <Calendar className="w-6 h-6 text-emerald" />
                     <div>
@@ -328,7 +358,7 @@ export default function App() {
               </div>
 
               {/* COLOR THEME DESIGN PANEL */}
-              <div className="bg-beige/30 p-8 rounded border border-beige flex flex-col justify-between">
+              {/* <div className="bg-beige/30 p-8 rounded border border-beige flex flex-col justify-between">
                 <div>
                   <h3 className="font-serif text-xl text-burgundy mb-2">Dress Code</h3>
                   <p className="text-sm text-stone-600 mb-6">
@@ -353,7 +383,7 @@ export default function App() {
                     <span>Beige</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </section>
 
             {/* RSVP FORM SECTION & ACCESS CARD DOWNLOAD */}
