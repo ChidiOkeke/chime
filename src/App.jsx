@@ -251,7 +251,7 @@ export default function App() {
 
 
           {/* 1. INTRO VIDEO GATE (intro only; rest of page appears after clicking button) */}
-          <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-burgundy-dark">
+          <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[url('./assets/background-mobile.png')] md:bg-[url('./assets/background-desktop.png')] bg-cover bg-center">
             {/* Dynamic Mute/Unmute Overlay Control */}
             <button
               onClick={toggleMute}
