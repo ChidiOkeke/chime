@@ -93,7 +93,7 @@ export default function App() {
 
         // Best-effort resume (may be blocked by browser)
         if (wasUnmuted) {
-          a.play().catch(() => {});
+          a.play().catch(() => { });
         }
       }
     };
@@ -257,14 +257,7 @@ export default function App() {
   return (
     <>
       {!hasEntered ? (
-        <IntroVideoGate
-          onEnter={() => {
-            setTimeout(() => {
-              mainSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-              setHasEntered(true);
-            }, 3000);
-          }}
-        />
+        <IntroVideoGate onEnter={handleEnterWebsite} />
       ) : (
         <div className="min-h-screen bg-ivory flex flex-col justify-between selection:bg-emerald selection:text-white">
           {showFlash && <div aria-hidden="true" className="flash-in-overlay pointer-events-none" />}
