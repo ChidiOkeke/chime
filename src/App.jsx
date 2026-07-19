@@ -28,6 +28,7 @@ export default function App() {
   const videoRef = useRef(null);
   const audioRef = useRef(null);
   const mainSectionRef = useRef(null);
+  const heroSectionRef = useRef(null);
 
 
   // Countdown timer math
@@ -127,7 +128,7 @@ export default function App() {
 
     // Smooth scroll down to details
     setTimeout(() => {
-      mainSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+      heroSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, 150);
   };
 
@@ -276,7 +277,7 @@ export default function App() {
 
           {/* 1. INTRO VIDEO GATE (intro only; rest of page appears after clicking button) */}
           <section
-            ref={mainSectionRef}
+            ref={heroSectionRef}
             className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[url('./assets/background-mobile.png')] md:bg-[url('./assets/background-desktop.png')] bg-cover bg-center">
             {/* Dynamic Mute/Unmute Overlay Control */}
             <button
@@ -307,7 +308,7 @@ export default function App() {
 
           {/* 2. MAIN SECTION (Appears smoothly after clicking Reveal) */}
           <div
-
+            ref={mainSectionRef}
             className={`transition-opacity duration-1000 ${hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           >
             {/* Countdown Timer Banner */}
