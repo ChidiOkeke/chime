@@ -257,7 +257,18 @@ export default function App() {
   return (
     <>
       {!hasEntered ? (
-        <IntroVideoGate onEnter={handleEnterWebsite} />
+        <IntroVideoGate
+          onEnter={() => {
+            // This will run strictly when the video finishes or fails
+            setHasEntered(true);
+            setShowFlash(true);
+
+            // Smooth scroll down automatically after the video ends
+            setTimeout(() => {
+              mainSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+          }}
+        />
       ) : (
         <div className="min-h-screen bg-ivory flex flex-col justify-between selection:bg-emerald selection:text-white">
           {showFlash && <div aria-hidden="true" className="flash-in-overlay pointer-events-none" />}
@@ -274,7 +285,7 @@ export default function App() {
 
 
           {/* 1. INTRO VIDEO GATE (intro only; rest of page appears after clicking button) */}
-          <section className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[url('./assets/background-mobile.png')] md:bg-[url('./assets/background-desktop.png')] bg-cover bg-center">
+          <section ref={mainSectionRef} className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[url('./assets/background-mobile.png')] md:bg-[url('./assets/background-desktop.png')] bg-cover bg-center">
             {/* Dynamic Mute/Unmute Overlay Control */}
             <button
               onClick={toggleMute}
@@ -304,7 +315,7 @@ export default function App() {
 
           {/* 2. MAIN SECTION (Appears smoothly after clicking Reveal) */}
           <div
-            ref={mainSectionRef}
+            
             className={`transition-opacity duration-1000 ${hasEntered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           >
             {/* Countdown Timer Banner */}
