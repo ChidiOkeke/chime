@@ -194,30 +194,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import introVideoUrl from '../assets/intro-vid.mp4';
 import introVideoMobileUrl from '../assets/new-intro-video-cropped.mp4';
+// PRO-TIP: Import a lightweight compressed JPG/WebP snapshot of the first frame
+import videoPosterUrl from '../assets/intro-poster.jpg'; 
 
 export default function IntroVideoGate({ onEnter }) {
   const videoRef = useRef(null);
 
-  const [ready, setReady] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [isOperaMini, setIsOperaMini] = useState(false);
+  const [isVideoSupported, setIsVideoSupported] = useState(true);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(max-width: 640px)');
       setIsMobile(mediaQuery.matches);
-
       const handler = (e) => setIsMobile(e.matches);
       mediaQuery.addEventListener('change', handler);
 
-      const isMini = Object.prototype.toString.call(window.operamini) === '[object OperaMini]' || 
-                     navigator.userAgent.includes('Opera Mini');
-      setIsOperaMini(isMini);
+      const videoElement = document.createElement('video');
+      const canPlayVideo = !!(videoElement.canPlayType && videoElement.canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"').replace(/no/, ''));
+      const isOperaMini = Object.prototype.toString.call(window.operamini) === '[object OperaMini]' || 
+                         navigator.userAgent.includes('Opera Mini');
 
-      // Core Fix: If it's a normal browser (like iOS Safari), assume capability.
-      // Do not force the user to wait for unstable loading hooks on old hardware.
-      setReady(true);
+      if (!canPlayVideo || isOperaMini) {
+        setIsVideoSupported(false);
+      }
 
       return () => mediaQuery.removeEventListener('change', handler);
     }
@@ -225,13 +226,13 @@ export default function IntroVideoGate({ onEnter }) {
 
   useEffect(() => {
     const v = videoRef.current;
-    if (!v || isOperaMini) return;
+    if (!v || !isVideoSupported) return;
 
-    // Force iOS properties explicitly directly onto the element
     v.muted = true;
+    v.defaultMuted = true; 
     v.setAttribute('playsinline', 'true');
     v.setAttribute('webkit-playsinline', 'true');
-  }, [isOperaMini]);
+  }, [isVideoSupported]);
 
   const handleEnter = async (e) => {
     if (e && e.stopPropagation) e.stopPropagation();
@@ -240,37 +241,44 @@ export default function IntroVideoGate({ onEnter }) {
     setHasStarted(true); 
 
     const v = videoRef.current;
-    if (!v || isOperaMini) {
+    if (!v || !isVideoSupported) {
       onEnter?.();
       return;
     }
 
     try {
       v.muted = true;
-      // Core iOS Fix: playsinline requires synchronous execution on the click thread
       await v.play();
     } catch (err) {
-      console.warn("Playback blocked or interrupted by iOS:", err);
-      // Fail gracefully: If Low Power Mode or iOS restrictions block execution, transition immediately
+      console.warn("Media playback interrupted or unsupported by hardware:", err);
       onEnter?.(); 
     }
   };
 
   return (
-    <section onClick={handleEnter}
-      className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-burgundy-dark">
+    <section 
+      onClick={handleEnter}
+      className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-burgundy-dark select-none"
+    >
       
-      {!isOperaMini && (
+      {isVideoSupported && (
         <video
           ref={videoRef}
-          className={`z-0 w-auto min-w-full min-h-full max-w-none filter ${isMobile ? 'scale-[1]' : 'scale-[1.3]'} object-cover`}
+          className={`absolute z-0 w-auto min-w-full min-h-full max-w-none ${isMobile ? 'scale-[1]' : 'scale-[1.3]'} object-cover pointer-events-none`}
           src={isMobile ? introVideoMobileUrl : introVideoUrl}
           loop={false}
           muted
           playsInline
-          webkitPlaysInline={true} // React-safe camelCase attribute pass-through
-          preload="metadata" // Safer choice for iOS Low Power Mode
-          onEnded={() => onEnter?.()} 
+          webkitPlaysInline={true}
+          autoPlay={false}
+          
+          // FIX 1: Change to "auto" so standard browsers buffer and paint the first frame immediately
+          preload="auto" 
+
+          // FIX 2 (Optional but Highly Recommended): Add a poster image fallback.
+          // This ensures a beautiful thumbnail shows instantly even on slow connections 
+          // or mobile data saving modes that ignore preload="auto".
+          poster={videoPosterUrl}
         />
       )}
 
@@ -278,10 +286,9 @@ export default function IntroVideoGate({ onEnter }) {
         <button
           type="button"
           onClick={handleEnter}
-          disabled={!ready}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 px-8 py-4 bg-burgundy text-beige hover:bg-emerald font-sans font-semibold text-sm tracking-[0.2em] uppercase rounded border border-beige/40 transition-all duration-300 shadow-2xl transform hover:scale-105 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 px-8 py-4 bg-burgundy text-beige hover:bg-emerald font-sans font-semibold text-sm tracking-[0.2em] uppercase rounded border border-beige/40 transition-all duration-300 shadow-2xl transform hover:scale-105 active:scale-95 cursor-pointer"
         >
-          {ready ? 'RSVP' : 'Loading…'}
+          RSVP
         </button>
       )}
     </section>
