@@ -375,7 +375,7 @@ export default function IntroVideoGate({ onEnter }) {
           // FIX 2 (Optional but Highly Recommended): Add a poster image fallback.
           // This ensures a beautiful thumbnail shows instantly even on slow connections 
           // or mobile data saving modes that ignore preload="auto".
-          poster={videoPosterUrl}
+          poster={isMobile ? videoPosterUrl : null}
           onEnded={() => onEnter?.()}
           
         />
